@@ -1,0 +1,60 @@
+version: '3.2'
+
+networks:
+  default:
+    external:
+      name: thestack
+
+services:
+
+  redis:
+    image: redis
+
+  db:
+    image: postgres:10.3
+    environment:
+      POSTGRES_USER: sciwms
+      POSTGRES_PASSWORD: sciwms
+      POSTGRES_DB: sciwms
+    volumes:
+      - scidbdata:/var/lib/postgresql/data
+
+  web:
+    image: axiom/sci-wms:latest
+    environment:
+      DJANGO_SETTINGS_MODULE: sciwms.settings.adv
+      DJANGO_SECRET_KEY: thisisalongstringthatrichcanchangewhenhewantstobutdoesnothaveto
+      SCIWMS_USERNAME: admin
+      SCIWMS_PASSWORD: tailpp1
+      WEB_CONCURRENCY: 4
+      POSTGRES_HOST: db
+      REDIS_HOST: redis
+    ports:
+      - "7002:7002"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - topologydata:/srv/sci-wms/wms/topology
+      - /silt:/silt:ro
+      - /sand:/sand:ro
+    command: docker/wait.sh db:5432 -- docker/run.sh
+
+  worker:
+    image: axiom/sci-wms:latest
+    environment:
+      DJANGO_SETTINGS_MODULE: sciwms.settings.adv
+      POSTGRES_HOST: db
+      REDIS_HOST: redis
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - topologydata:/srv/sci-wms/wms/topology
+      - /silt:/silt:ro
+      - /sand:/sand:ro
+    command: docker/wait.sh web:7002 -- python manage.py run_huey
+
+volumes:
+  scidbdata:
+  topologydata:

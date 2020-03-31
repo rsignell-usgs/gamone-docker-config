@@ -1,0 +1,145 @@
+# CHEAT-SHEET
+#
+# start container:
+#
+# stop container:
+#   docker-compose stop thredds
+#
+# remove container
+#   docker-compose rm -f thredds
+#
+# login to container 
+#   docker exec -it thredds bash
+# 
+# reload nginx without restarting
+# docker exec nginx /etc/init.d/nginx reload
+
+version: '3.1'
+
+networks: 
+  default:
+    external:
+      name: thestack
+  
+services:
+
+  nginx:
+    image: bradjonesllc/docker-nginx-letsencrypt
+    container_name: nginx
+    ports: 
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /opt/docker/brad/dhparam:/etc/ssl/dhparam 
+      - /opt/docker/brad/letsencrypt:/etc/letsencrypt 
+      - /opt/docker/nginx/html:/etc/nginx/html
+      - /opt/docker/nginx/conf.d/brad.conf:/etc/nginx/conf.d/brad.conf:consistent
+      - /opt/docker/nginx/conf.d/include/cors.include:/etc/nginx/conf.d/include/cors.include
+    environment:
+      - "CERTS=gamone.whoi.edu,geoport.usgs.esipfed.org"
+      - "EMAIL=rsignell@usgs.gov"
+
+
+# ###
+  # thredds:  THREDDS Data Server- Development
+  ###
+  tds:
+    image: unidata/thredds-docker
+    container_name: tds
+    ports:
+      - "8080:8080"
+    volumes:
+      - /opt/docker/tds/thredds/:/usr/local/tomcat/content/thredds/
+      - /opt/docker/tds/tomcat/logs/:/usr/local/tomcat/logs/
+      - /opt/docker/tds/tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - /sand:/sand:ro
+      - /silt:/silt:ro
+    env_file:
+      - "compose.env"
+
+  ###
+  # pycsw: pycsw Production
+  ###
+
+  # pycsw:
+  #   image: axiom/docker-pycsw
+  #   container_name: pycsw
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - /opt/docker/pycsw/usgs-cmg.cfg:/opt/pycsw/default.cfg
+  #     - /opt/docker/pycsw/force:/force 
+  #     - /opt/docker/pycsw/export:/export
+  #     - /opt/docker/pycsw/store:/store
+  #     - /opt/docker/pycsw/database:/database
+
+  postgres:
+    image: kartoza/postgis:11.0-2.5
+    container_name: postgres
+    stop_signal: SIGINT
+    environment:
+      POSTGRES_DBNAME: pycsw
+      POSTGRES_USER: pycsw
+      POSTGRES_PASS: pycsw
+    volumes:
+      - /opt/docker/postgres/data/db:/var/lib/postgresql
+
+  pycsw:
+    image: axiom/docker-pycsw:latest
+    container_name: pycsw
+    volumes:
+      - /opt/docker/pycsw/usgs-cmg.cfg:/opt/pycsw/default.cfg
+      - /opt/docker/pycsw/force:/force 
+      - /opt/docker/pycsw/export:/export
+      - /opt/docker/pycsw/store:/store
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  erddap:
+    image: axiom/docker-erddap
+    container_name: erddap
+    ports:
+      - "8090:8080"
+    volumes:
+      - /opt/docker/erddap/tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml  
+      - /opt/docker/erddap/setup.xml:/usr/local/tomcat/content/erddap/setup.xml  
+      - /opt/docker/erddap/datasets.xml:/usr/local/tomcat/content/erddap/datasets.xml  
+      - /opt/docker/erddap/data:/erddapData
+      - /sand:/sand:ro
+      - /silt:/silt:ro
+    env_file:
+      - "compose.env"
+
+
+  terriaslc:
+    image: zafdef/terriaslc:2018-10-28 
+    ports:
+      - "3003:3001"
+    container_name: terriaslc
+    volumes:
+      - /opt/docker/terriaslc/devserverconfig.json:/usr/local/app/TerriaMap/devserverconfig.json
+      - /opt/docker/terriaslc/config.json:/usr/local/app/TerriaMap/wwwroot/config.json
+      - /opt/docker/terriaslc/sweet_major.json:/usr/local/app/TerriaMap/wwwroot/init/sweet_major.json
+    
+  terriaslc2:
+    image: zafdef/terriaslc2:2018-11-06
+    ports:
+      - "3001:3001"
+    container_name: terriaslc2
+    volumes:
+      - /opt/docker/terriaslc2/devserverconfig.json:/usr/local/app/TerriaMap/devserverconfig.json
+      - /opt/docker/terriaslc2/config.json:/usr/local/app/TerriaMap/wwwroot/config.json
+      - /opt/docker/terriaslc2/sweet_major.json:/usr/local/app/TerriaMap/wwwroot/init/sweet_major.json
+    
+  terriamap:
+    image: zafdef/terriamap:2018-11-27
+    ports:
+      - "3005:3001"
+    container_name: terriamap
+    volumes:
+      - /opt/docker/terriamap/devserverconfig.json:/usr/local/app/TerriaMap/devserverconfig.json
+      - /opt/docker/terriamap/config.json:/usr/local/app/TerriaMap/wwwroot/config.json
+   

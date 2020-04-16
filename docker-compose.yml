@@ -107,6 +107,7 @@ services:
       - /opt/docker/erddap/tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml  
       - /opt/docker/erddap/setup.xml:/usr/local/tomcat/content/erddap/setup.xml  
       - /opt/docker/erddap/datasets.xml:/usr/local/tomcat/content/erddap/datasets.xml  
+      - /opt/docker/erddap/images:/usr/local/tomcat/content/erddap/images
       - /opt/docker/erddap/data:/erddapData
       - /sand:/sand:ro
       - /silt:/silt:ro

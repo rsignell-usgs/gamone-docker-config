@@ -36,7 +36,7 @@ services:
       - /opt/docker/nginx/conf.d/brad.conf:/etc/nginx/conf.d/brad.conf:consistent
       - /opt/docker/nginx/conf.d/include/cors.include:/etc/nginx/conf.d/include/cors.include
     environment:
-      - "CERTS=gamone.whoi.edu,geoport.usgs.esipfed.org"
+      - "CERTS=gamone.whoi.edu,geoport.usgs.esipfed.org,geoport.whoi.edu"
       - "EMAIL=rsignell@usgs.gov"
 
 
@@ -52,8 +52,10 @@ services:
       - /opt/docker/tds/thredds/:/usr/local/tomcat/content/thredds/
       - /opt/docker/tds/tomcat/logs/:/usr/local/tomcat/logs/
       - /opt/docker/tds/tomcat/conf/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - /opt/docker/tds/images/header_graphic_usgsIdentifier_white.jpg:/usr/local/tomcat/webapps/thredds/header_graphic_usgsIdentifier_white.jpg
       - /sand:/sand:ro
       - /silt:/silt:ro
+      - /usgs:/usgs:ro
     env_file:
       - "compose.env"
 

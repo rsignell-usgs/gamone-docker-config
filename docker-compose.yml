@@ -55,7 +55,10 @@ services:
       - /opt/docker/tds/images/header_graphic_usgsIdentifier_white.jpg:/usr/local/tomcat/webapps/thredds/header_graphic_usgsIdentifier_white.jpg
       - /sand:/sand:ro
       - /silt:/silt:ro
-      - /usgs:/usgs:ro
+      - /silt/usgs/gamone/vault0:/usgs/vault0:ro
+      - /silt/usgs/gamone/data0:/usgs/data0:ro
+      - /silt/usgs/gamone/data1:/usgs/data1:ro
+      - /silt/usgs/gamone/data2:/usgs/data2:ro
     env_file:
       - "compose.env"
 
@@ -101,7 +104,7 @@ services:
       - postgres
 
   erddap:
-    image: axiom/docker-erddap
+    image: axiom/docker-erddap:latest
     container_name: erddap
     ports:
       - "8090:8080"

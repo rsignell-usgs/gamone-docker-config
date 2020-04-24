@@ -6,22 +6,20 @@
     <service name="ncdods" serviceType="OpenDAP" base="/thredds/dodsC/"/>
     <service name="HTTPServer" serviceType="HTTPServer" base="/thredds/fileServer/"/>
     <service name="ncss" serviceType="NetcdfSubset" base="/thredds/ncss/grid/"/>
-  <service name="iso" serviceType="ISO" base="/thredds/iso/"/>
-  <service name="ncml" serviceType="NCML" base="/thredds/ncml/"/>
-  <service name="uddc" serviceType="UDDC" base="/thredds/uddc/"/>
-   <service name="wms" serviceType="WMS" base="/thredds/wms/"/>
-  <service name="sos" serviceType="SOS" base="/thredds/sos/" />
+    <service name="iso" serviceType="ISO" base="/thredds/iso/"/>
+    <service name="ncml" serviceType="NCML" base="/thredds/ncml/"/>
+    <service name="uddc" serviceType="UDDC" base="/thredds/uddc/"/>
+    <service name="wms" serviceType="WMS" base="/thredds/wms/"/>
   </service> 
+
   
- <datasetScan name="USGS NetCDF files on data2" ID="usgs/data2" path="usgs/data2"
-    location="/usgs/data2">
+ <datasetScan name="examples" ID="examples" path="examples" location="/usgs/vault0/models/examples">
    <metadata inherited="true">
      <serviceName>allServices</serviceName>
     </metadata>
     <filter>
-      <include wildcard="*.ncml"/>  
       <include wildcard="*.nc"/>  
-      <include wildcard="*.txt"/>  
+      <include wildcard="*.ncml"/>  
       <include wildcard="*.grd"/>  
       <include wildcard="*.nc.gz"/>  
       <include wildcard="*.cdf"/>
@@ -30,9 +28,6 @@
       <include wildcard="*.grb2"/>
       <include wildcard="*.grib2"/>
       <include wildcard="*_00_00"/>
-      <include wildcard="*.wrfdiag_d01"/>
-      <include wildcard="*.wrfdiag_d02"/>
-      <include wildcard="*.wrfdiag_d03"/>
     </filter>
     <sort>
       <lexigraphicByName increasing="true"/>

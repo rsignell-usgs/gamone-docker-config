@@ -1,0 +1,13 @@
+<catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.unidata.ucar.edu/namespaces/thredds/InvCatalog/v1.0 http://www.unidata.ucar.edu/schemas/thredds/InvCatalog.1.0.3.xsd"
+ xmlns="http://www.unidata.ucar.edu/namespaces/thredds/InvCatalog/v1.0"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ name="USGS SedTrans THREDDS Server">
+ <dataset name="Digital Elevation Models">
+ <catalogRef xlink:title="Global" xlink:href="global_bathy.xml" name=""/>
+ <catalogRef xlink:title="United States" xlink:href="usa_bathy.xml" name=""/>
+ <catalogRef xlink:title="Gulf of Maine" xlink:href="gom_bathy.xml" name=""/>
+ <catalogRef xlink:title="Other Regional" xlink:href="regional_bathy.xml" name=""/>
+
+</dataset>
+</catalog>

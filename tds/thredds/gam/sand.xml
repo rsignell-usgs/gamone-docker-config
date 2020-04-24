@@ -9,19 +9,21 @@
   <service name="iso" serviceType="ISO" base="/thredds/iso/"/>
   <service name="ncml" serviceType="NCML" base="/thredds/ncml/"/>
   <service name="uddc" serviceType="UDDC" base="/thredds/uddc/"/>
-   <service name="wms" serviceType="WMS" base="/thredds/wms/"/>
-  <service name="sos" serviceType="SOS" base="/thredds/sos/" />
+    <service name="wms" serviceType="WMS" base="/thredds/wms/"/>
   </service> 
   
- <datasetScan name="USGS NetCDF files on data2" ID="usgs/data2" path="usgs/data2"
-    location="/usgs/data2">
+ <datasetScan name="USGS NetCDF files on sand/Projects" ID="sand/usgs/Projects" path="sand/usgs/Projects"
+    location="/sand/usgs/Projects">
    <metadata inherited="true">
      <serviceName>allServices</serviceName>
     </metadata>
     <filter>
+      <include wildcard="*.h"/>  
+      <include wildcard="*.in"/>  
       <include wildcard="*.ncml"/>  
       <include wildcard="*.nc"/>  
       <include wildcard="*.txt"/>  
+      <include wildcard="*.zip"/>  
       <include wildcard="*.grd"/>  
       <include wildcard="*.nc.gz"/>  
       <include wildcard="*.cdf"/>
@@ -30,9 +32,6 @@
       <include wildcard="*.grb2"/>
       <include wildcard="*.grib2"/>
       <include wildcard="*_00_00"/>
-      <include wildcard="*.wrfdiag_d01"/>
-      <include wildcard="*.wrfdiag_d02"/>
-      <include wildcard="*.wrfdiag_d03"/>
     </filter>
     <sort>
       <lexigraphicByName increasing="true"/>
@@ -40,4 +39,30 @@
     <addDatasetSize/>
   </datasetScan>
 
+ <datasetScan name="USGS NetCDF files on sand/users" ID="sand/usgs/users" path="sand/usgs/users"
+    location="/sand/usgs/users">
+   <metadata inherited="true">
+     <serviceName>allServices</serviceName>
+    </metadata>
+    <filter>
+      <include wildcard="*.h"/>  
+      <include wildcard="*.in"/>  
+      <include wildcard="*.ncml"/>  
+      <include wildcard="*.nc"/>  
+      <include wildcard="*.txt"/>  
+      <include wildcard="*.zip"/>  
+      <include wildcard="*.grd"/>  
+      <include wildcard="*.nc.gz"/>  
+      <include wildcard="*.cdf"/>
+      <include wildcard="*.grib"/>
+      <include wildcard="*.grb"/>
+      <include wildcard="*.grb2"/>
+      <include wildcard="*.grib2"/>
+      <include wildcard="*_00_00"/>
+    </filter>
+    <sort>
+      <lexigraphicByName increasing="true"/>
+    </sort>
+    <addDatasetSize/>
+  </datasetScan>
 </catalog>
